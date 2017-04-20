@@ -49,6 +49,8 @@ def on_result_response(*args ):
             # Some of the records are not automatically decoded and need to pass
             # into ripe.atlas.sagan firat
             res = DnsResult.get(args[0],parse_buf=True)
+            if res.is_error:
+                return True
             if (res.responses[0].abuf.answers):
                 for answer in res.responses[0].abuf.answers:
                     process_answers(data=answer['raw_data'], sagan=True)
