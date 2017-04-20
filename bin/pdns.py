@@ -43,7 +43,14 @@ def on_result_response(*args ):
     if 'result' in args[0]:
         result = args[0]['result']
         if 'answers' in result:
-            process_answers(data=result['answers'])
+            #process_answers(data=result['answers'])
+            res = DnsResult.get(args[0],parse_buf=True)
+            if res.is_error:
+                return True
+            if (res.responses[0].abuf.answers):
+                for answer in res.responses[0].abuf.answers:
+                    process_answers(data=answer['raw_data'], sagan=True)
+
            # print (result['answers'])
         else:
             # Some of the records are not automatically decoded and need to pass
