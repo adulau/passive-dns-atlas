@@ -16,6 +16,7 @@ from ripe.atlas.sagan import Result
 from ripe.atlas.sagan import DnsResult
 import dns.message
 import base64
+import argparse
 
 # Fields name are different in sagan and cousteau for parsed DNS
 fields = ['TYPE', 'NAME']
@@ -24,6 +25,8 @@ fieldsSagan = ['Type', 'Name', 'TTL', 'Class', 'Serial', 'Rname', 'MasterServerN
 def process_answers(data=None, sagan=False):
     if data is None:
         return False
+    if args.debug:
+        print ("{}".format(data))
     if not sagan:
         for answer in data:
             for field in fields:
@@ -68,6 +71,12 @@ def on_result_response(*args ):
             #print (dns.message.from_wire(base64.b64decode(args[0]['result']['abuf'])))
             print ('no answers')
 
+
+parser = argparse.ArgumentParser(description='passive-dns-atlas')
+parser.add_argument("-d","--debug", default=False, action='store_true')
+parser.add_argument("-t","--timeout", default=400, type=float, help="set atlas stream timeout, default is 400 sec")
+args = parser.parse_args()
+
 atlas_stream = AtlasStream()
 atlas_stream.connect()
 
@@ -77,5 +86,5 @@ atlas_stream.bind_channel(channel, on_result_response)
 stream_parameters = {"type": "dns"}
 atlas_stream.start_stream(stream_type="result", **stream_parameters)
 
-atlas_stream.timeout(seconds=400)
+atlas_stream.timeout(seconds=args.timeout)
 atlas_stream.disconnect()
