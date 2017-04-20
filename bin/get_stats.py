@@ -10,7 +10,7 @@
 import redis
 from prettytable import PrettyTable
 
-fieldsSagan = ['Type', 'Name', 'TTL', 'Class']
+fieldsSagan = ['Type', 'Name', 'TTL', 'Class', 'Serial', 'Rname', 'MasterServerName', 'MaintainerName', 'Data']
 limit = 100
 
 r = redis.StrictRedis(host='localhost', port=6379)

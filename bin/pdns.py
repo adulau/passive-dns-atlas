@@ -19,7 +19,7 @@ import base64
 
 # Fields name are different in sagan and cousteau for parsed DNS
 fields = ['TYPE', 'NAME']
-fieldsSagan = ['Type', 'Name', 'TTL', 'Class']
+fieldsSagan = ['Type', 'Name', 'TTL', 'Class', 'Serial', 'Rname', 'MasterServerName', 'MaintainerName', 'Data']
 
 def process_answers(data=None, sagan=False):
     if data is None:
@@ -31,6 +31,8 @@ def process_answers(data=None, sagan=False):
             #r.zincrby('mname', answer['MNAME'], 1)
     else:
         for field in fieldsSagan:
+                if field not in data:
+                    continue
                 r.zincrby(field.upper(), data[field], 1)
 
 def truncating(default=50):
