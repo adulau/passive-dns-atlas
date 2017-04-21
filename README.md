@@ -5,6 +5,8 @@ Passive DNS collection (and statistics) from RIPE Atlas Sensors
 The goal is to use RIPE Atlas Sensors as a source of DNS information for passive collection but also to provide
 additional information and statistics to Passive DNS users from the DNS measurements performed by the RIPE Atlas sensors.
 
+![overview](./overview.png)
+
 # Requirements
 
 - Python 3
