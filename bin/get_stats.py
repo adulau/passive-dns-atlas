@@ -20,7 +20,11 @@ parser.add_argument("-t","--table", default=False, action='store_true', help="Du
 parser.add_argument("-c","--csvd3js", default=False, action='store_true', help="Generate D3.js Bubble Chart")
 parser.add_argument("-l","--limit", type=int, default=100, help="Limit of values to export per ZRANK - default 100")
 parser.add_argument("-o","--outputdir", default="./stats/", help="Output directory")
+parser.add_argument("-s","--skip", default=None, action="append", help="Skip a specific value from the statistics")
 args = parser.parse_args()
+
+if args.skip is None:
+    args.skip = ['']
 
 if not os.path.exists(args.outputdir):
     os.makedirs(args.outputdir)
@@ -34,12 +38,16 @@ for field in fieldsSagan:
         table = PrettyTable()
         table.field_names = ["Number of occurences",field.upper()]
         for value in c:
+            if value[0] in args.skip:
+                continue
             table.add_row([value[1],value[0].decode()])
         print (table)
     elif args.csvd3js:
         with open("{}/{}.csv".format(args.outputdir,field.upper()), 'w') as f:
             f.write("id,value\n")
             for value in c:
+                if value[0].decode() in args.skip:
+                    continue
                 f.write("{},\n".format(value[0].decode()))
                 f.write("{},{}\n".format(value[0].decode(),int(value[1])))
 
