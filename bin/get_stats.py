@@ -14,11 +14,11 @@ import sys
 import os
 
 fieldsSagan = ['Type', 'Name', 'TTL', 'Class', 'Serial', 'Rname', 'MasterServerName', 'MaintainerName', 'Data']
-limit = 100
 
 parser = argparse.ArgumentParser(description='passive-dns-atlas statistics extractor')
 parser.add_argument("-t","--table", default=False, action='store_true', help="Dump statistics table in ASCII")
 parser.add_argument("-c","--csvd3js", default=False, action='store_true', help="Generate D3.js Bubble Chart")
+parser.add_argument("-l","--limit", type=int, default=100, help="Limit of values to export per ZRANK - default 100")
 parser.add_argument("-o","--outputdir", default="./stats/", help="Output directory")
 args = parser.parse_args()
 
@@ -28,7 +28,7 @@ if not os.path.exists(args.outputdir):
 r = redis.StrictRedis(host='localhost', port=6379)
 
 for field in fieldsSagan:
-    c = r.zrange(field.upper(), 0, limit, desc=True, withscores=True)
+    c = r.zrange(field.upper(), 0, args.limit, desc=True, withscores=True)
 
     if args.table:
         table = PrettyTable()
