@@ -15,51 +15,91 @@ additional information and statistics to Passive DNS users from the DNS measurem
 
 # Usage
 
+## Feeding the system
+
+The default `atlas_result` stream is used and only the current `dns` measurement is gathered.
+
+Don't forget to set your API key for Atlas via `ripe-atlas configure --set authorisation.create=MY_API_KEY`.
+
 ~~~~
-./bin/pdns.py
+python3 pdns.py --help
+usage: pdns.py [-h] [-d] [-t TIMEOUT]
+
+passive-dns-atlas
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug
+  -t TIMEOUT, --timeout TIMEOUT
+                        set atlas stream timeout, default is 400 sec
 ~~~~
+
+In parallel, you can generate statistics from the `dns` measurement gathered.
+
+~~~~
+python3 get_stats.py --help
+usage: get_stats.py [-h] [-t] [-c] [-l LIMIT] [-o OUTPUTDIR] [-s SKIP]
+
+passive-dns-atlas statistics extractor
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t, --table           Dump statistics table in ASCII
+  -c, --csvd3js         Generate D3.js Bubble Chart
+  -l LIMIT, --limit LIMIT
+                        Limit of values to export per ZRANK - default 100
+  -o OUTPUTDIR, --outputdir OUTPUTDIR
+                        Output directory
+  -s SKIP, --skip SKIP  Skip a specific value from the statistics
+~~~~
+
+Specific values can be skip to avoid these in the statistics like `--skip 0 --skip 86400`.
 
 # Current Statistics
 
+`get_stats.py -t`
+
 ~~~~
-127.0.0.1:6379> ZREVRANGE NAME 0 12
- 1) "hostname.bind"
- 2) "."
- 3) "id.server"
- 4) "pt."
- 5) "by."
- 6) "xn--90ais."
- 7) "com."
- 8) "se."
- 9) "es."
-10) "ie."
-11) "net."
-12) "version.bind"
-13) "il."
-127.0.0.1:6379> ZREVRANGE TYPE 0 12
-1) "TXT"
-2) "SOA"
-3) "A"
-4) "CNAME"
-5) "MX"
-6) "NS"
-7) "AAAA"
-127.0.0.1:6379> ZREVRANGE TYPE 0 12 WITHSCORES
- 1) "TXT"
- 2) "249269"
- 3) "SOA"
- 4) "118628"
- 5) "A"
- 6) "1275"
- 7) "CNAME"
- 8) "118"
- 9) "MX"
-10) "65"
-11) "NS"
-12) "48"
-13) "AAAA"
-14) "31"
++----------------------+-------+
+| Number of occurences |  TYPE |
++----------------------+-------+
+|       2872619        |  TXT  |
+|       1269079        |  SOA  |
+|        28912         |   A   |
+|         1353         | CNAME |
+|         1005         |   MX  |
+|         468          |  AAAA |
+|         400          |   NS  |
+|          21          | RRSIG |
+|          12          |  PTR  |
++----------------------+-------+
+....
 ~~~~
+
+`get_stats.py -c --skip 0` generates a series of CSV files that can be ingested in D3.js bubble chart view.
+
+![SOA records](soa.png)
 
 # License
 
+
+~~~~
+    passive-dns-atlas - a set of tool to gather RIPE Atlas Stream DNS measurement to do statistics and populate other Passive DNS.
+
+    Copyright (C) 2017  Alexandre Dulaunoy
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+~~~~
+ 
