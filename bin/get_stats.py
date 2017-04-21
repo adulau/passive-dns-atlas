@@ -40,7 +40,7 @@ for field in fieldsSagan:
         for value in c:
             if value[0] in args.skip:
                 continue
-            table.add_row([value[1],value[0].decode()])
+            table.add_row([int(value[1]),value[0].decode()])
         print (table)
     elif args.csvd3js:
         with open("{}/{}.csv".format(args.outputdir,field.upper()), 'w') as f:
