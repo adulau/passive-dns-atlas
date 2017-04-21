@@ -38,9 +38,10 @@ for field in fieldsSagan:
         print (table)
     elif args.csvd3js:
         with open("{}/{}.csv".format(args.outputdir,field.upper()), 'w') as f:
-            f.write("id,value")
+            f.write("id,value\n")
             for value in c:
-                f.write("{},{}\n".format(value[0].decode(),value[1]))
+                f.write("{},\n".format(value[0].decode()))
+                f.write("{},{}\n".format(value[0].decode(),int(value[1])))
 
     else:
         print ("You need a specify an output like --table or at least one of the options below")
