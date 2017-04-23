@@ -24,8 +24,7 @@ The default `atlas_result` stream is used and only the current `dns` measurement
 Don't forget to set your API key for Atlas via `ripe-atlas configure --set authorisation.create=MY_API_KEY`.
 
 ~~~~
-python3 pdns.py --help
-usage: pdns.py [-h] [-d] [-t TIMEOUT]
+usage: pdns.py [-h] [-d] [-t TIMEOUT] [-o ONLY]
 
 passive-dns-atlas
 
@@ -34,6 +33,8 @@ optional arguments:
   -d, --debug
   -t TIMEOUT, --timeout TIMEOUT
                         set atlas stream timeout, default is 400 sec
+  -o ONLY, --only ONLY  set a filter to allow check a specifity key and value
+                        in DNS. format is key,value like Type,TXT
 ~~~~
 
 In parallel, you can generate statistics from the `dns` measurement gathered.
